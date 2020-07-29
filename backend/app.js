@@ -1,9 +1,15 @@
 const express = require('express');
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const userRoute = require("routes/user");
 const sauceRoute = require("routes/sauce");
 
-//mongoose
+mongoose.connect('mongodb+srv://Bear-lord:projetP6@cluster0-shard-00-00.q2ab5.mongodb.net:27017/test?retryWrites=true&w=majority',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express();
 
