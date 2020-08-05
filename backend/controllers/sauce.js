@@ -3,41 +3,41 @@ const fs = require("fs");
 
 exports.createSauce = (req, res, next) => {
 	const sauceReq = JSON.parse(req.body.sauce);
-	  const sauce = new Sauce({
+	const sauce = new Sauce({
 	   	...sauceReq,
 	 	imageUrl: '${req.protocol}://${req.get("host")}/images/${req.file.filename}',
 	  	likes: 0,
 	  	dislikes: 0,
 	  	usersLiked: [],
 	  	usersDisliked: [],
-	  });
-  sauce.save().then(
-    () => {
-      res.status(201).json({
-        message: 'Sauce enregistrée!'
-      });
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
+	});
+  	sauce.save().then(
+	    () => {
+	      	res.status(201).json({
+	       	 	message: 'Sauce enregistrée!'
+	      	});
+	    }
+	).catch(
+	    (error) => {
+	      	res.status(400).json({
+	        	error
+	      	});
+	    }
+	);
 };
 
 exports.updateSauce = (req, res, next) => {
 	const sauceReq = req.file
 	? {
 		...JSON.parse(req.body.sauce),
-		imageUrl :  '${req.protocol}://{${req.get("host")}/images/${req.file.filename}'
+		imageUrl :  `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
 	}
 	: {...req.body};
 	if(req.file){
 		Sauce.findOne({_id: req.params.id}).then(
 		(sauce) => {
 			const fileName = sauce.imageUrl.split("/images/")[1];
-			fs.unlink("images/${fileName}", () => {
+			fs.unlink(`images/${fileName}`, () => {
 				Sauce.updateOne(
 					{_id: req.params.id},
 					{...sauceReq,
@@ -89,7 +89,7 @@ exports.deleteSauce = (req, res, next) => {
 	Sauce.findOne({_id: req.params.id}).then(
 		(sauce) => {
 			const fileName = sauce.imageUrl.split("/images/")[1];
-			fs.unlink("images/${fileName}", () => {
+			fs.unlink(`images/${fileName}`, () => {
 				Sauce.deleteOne({_id: req.params.id}).then(
 				    () => {
 				      	res.status(200).json({
@@ -122,8 +122,8 @@ exports.getOneSauce = (req, res, next) => {
     }
   ).catch(
     (error) => {
-      res.status(400).json({
-        error: error
+      res.status(404).json({
+        error
       });
     }
   );
@@ -136,8 +136,8 @@ exports.getAllSauces = (req, res, next) => {
     }
   ).catch(
     (error) => {
-      res.status(400).json({
-        error: error
+      res.status(404).json({
+        error
       });
     }
   );
@@ -146,7 +146,7 @@ exports.getAllSauces = (req, res, next) => {
 exports.likeSauce = (req, res, next) => {
 	switch(req.body.like){
 		case 0:
-			Sauce.findeOne({_id: req.params.id}).then(
+			Sauce.findOne({_id: req.params.id}).then(
 				(sauce) => {
 					if(sauce.usersLiked.find((user) => user === req.body.userId)){
 						Sauce.updateOne(
@@ -197,7 +197,7 @@ exports.likeSauce = (req, res, next) => {
 			 );
 			break;
 		case 1:
-			Sauce.findeOne({_id: req.params.id}).then(
+			Sauce.findOne({_id: req.params.id}).then(
 				(sauce) => {
 					if(!sauce.usersLiked.find((user) => user === req.body.userId)){
 						Sauce.updateOne(
@@ -250,7 +250,7 @@ exports.likeSauce = (req, res, next) => {
 			break;
 		case -1:
 
-			Sauce.findeOne({_id: req.params.id}).then(
+			Sauce.findOne({_id: req.params.id}).then(
 				(sauce) => {
 					if(sauce.usersLiked.find((user) => user === req.body.userId)){
 						Sauce.updateOne(
