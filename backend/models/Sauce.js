@@ -1,3 +1,5 @@
+//Schéma de données strict des sauces
+
 const mongoose = require('mongoose');
 
 const sauceSchema = mongoose.Schema({
@@ -14,4 +16,5 @@ const sauceSchema = mongoose.Schema({
   	usersDisliked: { type: [String], required: false },
 });
 
+// Exportation du schéma en tant que modèle pour le rendre disponible sur l'application
 module.exports = mongoose.model('Sauce', sauceSchema);
